@@ -6,17 +6,14 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 
-app.use(cors({
-    origin: 'https://be-literacy-connect.vercel.app', // Gantilah dengan domain yang diizinkan
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-}));
+app.use(cors());
 
 // Middleware untuk parsing JSON
 app.use(express.json());
 
-// Endpoint untuk mendapatkan data dari tabel "donatur"
+
 app.get('/donatur', (req, res) => {
-    const query = 'SELECT * FROM donatur'; // Pastikan tabel 'donatur' ada
+    const query = 'SELECT * FROM donatur';
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Gagal mengambil data', details: err });
