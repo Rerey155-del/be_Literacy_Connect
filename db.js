@@ -1,6 +1,8 @@
 require('dotenv').config(); // Load environment variables
 const mysql = require('mysql2');
 
+
+
 // Konfigurasi koneksi database
 const db = mysql.createConnection({
     host: process.env.DB_HOST, 

@@ -5,6 +5,9 @@ const db = require('./db');
 const app = express();
 const port = process.env.PORT || 5000;
 
+const cors = require('cors');
+app.use(cors());
+
 // Middleware untuk parsing JSON
 app.use(express.json());
 
