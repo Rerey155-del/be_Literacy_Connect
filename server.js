@@ -6,7 +6,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://be-literacy-connect.vercel.app', // Gantilah dengan domain yang diizinkan
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
 // Middleware untuk parsing JSON
 app.use(express.json());
