@@ -12,9 +12,6 @@
         "dest": "server.js"
       }
     ],
-    "rewrites": [
-      { "source": "/donatur", "destination": "/donatur" }
-    ],
     "env": {
       "NODE_ENV": "production"
     },
