@@ -19,7 +19,6 @@ app.get('/donatur', (req, res) => {
     });
 });
 
-app.
 
 // Menjalankan server
 app.listen(port, () => {
