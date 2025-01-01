@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 
 // Routes
 // Get all users
-app.get('/api/users', (req, res) => {
-    const query = 'SELECT * FROM users';
+app.get('/api', (req, res) => {
+    const query = 'SELECT * FROM donatur';
     db.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
@@ -23,9 +23,9 @@ app.get('/api/users', (req, res) => {
 });
 
 // Add a user
-app.post('/api/users', (req, res) => {
+app.post('/api', (req, res) => {
     const { name, email, password } = req.body;
-    const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO donatur (id_donatur, nama, email, nomor_telepon, tanggal_daftar) VALUES (?, ?, ?)';
     db.query(query, [name, email, password], (err, result) => {
         if (err) {
             return res.status(500).json({ error: err.message });
