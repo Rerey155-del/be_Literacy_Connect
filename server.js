@@ -22,7 +22,18 @@ app.get("/donatur", (req, res) => {
         .status(500)
         .json({ error: "Gagal mengambil data", details: err });
     }
-    res.json(results); // Mengirim data sebagai JSON
+    res.json(results); 
+  });
+});
+app.get("/campaign", (req, res) => {
+  const query = "SELECT * FROM campaign";
+  db.query(query, (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Gagal mengambil data", details: err });
+    }
+    res.json(results); 
   });
 });
 
