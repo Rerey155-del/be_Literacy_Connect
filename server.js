@@ -6,8 +6,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 
-const multer = require("multer");// Middleware untuk menangani form-data
-const upload = multer();// Middleware untuk menangani form-data
+const multer = require("multer"); // Middleware untuk menangani form-data
+const upload = multer(); // Middleware untuk menangani form-data
 
 app.use(cors());
 
@@ -22,7 +22,7 @@ app.get("/donatur", (req, res) => {
         .status(500)
         .json({ error: "Gagal mengambil data", details: err });
     }
-    res.json(results); 
+    res.json(results);
   });
 });
 app.get("/campaign", (req, res) => {
@@ -33,7 +33,27 @@ app.get("/campaign", (req, res) => {
         .status(500)
         .json({ error: "Gagal mengambil data", details: err });
     }
-    res.json(results); 
+    res.json(results);
+  });
+});
+
+app.get("/campaign/:id", (req, res) => {
+  const { id } = req.params; // Ambil parameter id dari URL
+  const query = "SELECT * FROM campaign WHERE id = ?"; // Query untuk mendapatkan data berdasarkan id
+
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Gagal mengambil data", details: err });
+    }
+
+    if (results.length === 0) {
+      // Jika data tidak ditemukan
+      return res.status(404).json({ error: "Data tidak ditemukan" });
+    }
+
+    res.json(results[0]); // Kembalikan hanya data pertama (karena id bersifat unik)
   });
 });
 
