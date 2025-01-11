@@ -61,7 +61,7 @@ app.post("/donatur", upload.none(), (req, res) => {
   // Data akan tersedia di req.body
   const { nama, email, password, nomor_telepon } = req.body;
 
-  if (!nama || !email || !password || !nomor_telepon) {
+  if (!nama || !email || !password ) {
     return res.status(400).json({ error: "Semua field harus diisi!" });
   }
 
