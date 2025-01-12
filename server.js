@@ -36,12 +36,10 @@ app.get("/campaign", (req, res) => {
   });
 });
 
-// PUT update campaign nominal by ID
+// PUT update campaign nominal and donatur count by ID
 app.put("/campaign/:id", (req, res, next) => {
   const { id } = req.params;
   const { nominal } = req.body;
-
-  console.log("Nominal yang diterima:", nominal); // Tambahkan log ini untuk debugging
 
   if (!id || isNaN(id)) {
       return res.status(400).json({ message: "ID tidak valid." });
@@ -51,23 +49,35 @@ app.put("/campaign/:id", (req, res, next) => {
       return res.status(400).json({ message: "Nominal tidak valid." });
   }
 
-  // Menggunakan callback style tanpa promise
-  db.query(
-      "UPDATE campaign SET nominal = nominal + ? WHERE id = ?",
-      [nominal, id],
-      (err, result) => {
+  // Update nominal dan jumlah donatur
+  const query = `
+      UPDATE campaign 
+      SET nominal = nominal + ?, donatur = donatur + 1
+      WHERE id = ?
+  `;
+
+  db.query(query, [nominal, id], (err, result) => {
+      if (err) {
+          console.error("Error saat memperbarui kampanye:", err);
+          return next(err);
+      }
+
+      if (result.affectedRows === 0) {
+          return res.status(404).json({ message: "Data tidak ditemukan." });
+      }
+
+      // Mengambil data terbaru kampanye
+      const getQuery = "SELECT * FROM campaign WHERE id = ?";
+      db.query(getQuery, [id], (err, rows) => {
           if (err) {
-              console.error("Error saat memperbarui nominal:", err);
+              console.error("Error saat mengambil data kampanye:", err);
               return next(err);
           }
 
-          if (result.affectedRows === 0) {
-              return res.status(404).json({ message: "Data tidak ditemukan." });
-          }
-
-          res.status(200).json({ message: `Nominal berhasil diperbarui dengan nilai tambahan ${nominal}.` });
-      }
-  );
+          // Mengirimkan data kampanye terbaru ke client
+          res.status(200).json({ message: "Nominal dan donatur berhasil diperbarui.", donatur: rows[0] });
+      });
+  });
 });
 
 
