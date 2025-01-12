@@ -6,6 +6,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
 
+
+
 const multer = require("multer"); // Middleware untuk menangani form-data
 const upload = multer(); // Middleware untuk menangani form-data
 
@@ -36,6 +38,43 @@ app.get("/campaign", (req, res) => {
     res.json(results);
   });
 });
+
+// PUT update campaign nominal by ID
+app.put("/campaign/:id", (req, res, next) => {
+  const { id } = req.params;
+  const { nominal } = req.body;
+
+  console.log("Nominal yang diterima:", nominal); // Tambahkan log ini untuk debugging
+
+  if (!id || isNaN(id)) {
+      return res.status(400).json({ message: "ID tidak valid." });
+  }
+
+  if (!nominal || isNaN(nominal)) {
+      return res.status(400).json({ message: "Nominal tidak valid." });
+  }
+
+  // Menggunakan callback style tanpa promise
+  db.query(
+      "UPDATE campaign SET nominal = nominal + ? WHERE id = ?",
+      [nominal, id],
+      (err, result) => {
+          if (err) {
+              console.error("Error saat memperbarui nominal:", err);
+              return next(err);
+          }
+
+          if (result.affectedRows === 0) {
+              return res.status(404).json({ message: "Data tidak ditemukan." });
+          }
+
+          res.status(200).json({ message: `Nominal berhasil diperbarui dengan nilai tambahan ${nominal}.` });
+      }
+  );
+});
+
+
+
 
 app.get("/campaign/:id", (req, res) => {
   const { id } = req.params; // Ambil parameter id dari URL
