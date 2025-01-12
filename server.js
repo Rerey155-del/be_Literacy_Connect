@@ -5,9 +5,6 @@ const db = require("./db");
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
-
-
-
 const multer = require("multer"); // Middleware untuk menangani form-data
 const upload = multer(); // Middleware untuk menangani form-data
 
